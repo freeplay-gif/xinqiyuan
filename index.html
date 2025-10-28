@@ -112,7 +112,7 @@
             border: 1px solid var(--border-color);
             border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3 ease;
             font-size: 1rem;
             display: flex;
             align-items: center;
@@ -132,7 +132,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(74, 144, 226, 0.2), transparent);
-            transition: left 0.5s;
+            transition: left 0.5;
         }
         
         .tab:hover::before {
@@ -160,7 +160,7 @@
             margin-bottom: 40px;
             border: 1px solid var(--border-color);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.5 ease;
             position: relative;
         }
         
@@ -197,6 +197,55 @@
             letter-spacing: 1px;
         }
         
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: var(--blue-light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-group label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-color);
+            color: var(--text-color);
+            font-family: 'Crimson Text', serif;
+            font-size: 1rem;
+        }
+        
+        .reset-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Crimson Text', serif;
+            font-size: 1rem;
+            align-self: flex-end;
+        }
+        
+        .reset-btn:hover {
+            background-color: var(--blue-dark);
+        }
+        
         .turtle-soup-card {
             background-color: var(--card-color);
             border-radius: 8px;
@@ -207,6 +256,8 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 20px;
         }
         
         .turtle-soup-card::before {
@@ -224,6 +275,34 @@
         .turtle-soup-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .limit-counter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            padding: 15px 10px;
+            background-color: var(--blue-light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .limit-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .limit-label {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            text-align: center;
+        }
+        
+        .soup-content-wrapper {
+            flex: 1;
         }
         
         .soup-title {
@@ -276,7 +355,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+            transition: left 0.5;
         }
         
         .btn:hover::before {
@@ -510,6 +589,21 @@
                 max-width: 300px;
             }
             
+            .filter-section {
+                flex-direction: column;
+            }
+            
+            .turtle-soup-card {
+                flex-direction: column;
+            }
+            
+            .limit-counter {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 10px 15px;
+            }
+            
             table {
                 font-size: 0.9rem;
             }
@@ -636,6 +730,30 @@
         <!-- 海龟汤大全模块 -->
         <div id="module1" class="module active">
             <h2><i class="fas fa-book"></i> 海龟汤大全</h2>
+            
+            <!-- 分类筛选器 -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="difficulty-filter">难度筛选</label>
+                    <select id="difficulty-filter" class="filter-select">
+                        <option value="all">全部难度</option>
+                        <option value="easy">简单</option>
+                        <option value="medium">中等</option>
+                        <option value="hard">困难</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="author-filter">作者筛选</label>
+                    <select id="author-filter" class="filter-select">
+                        <option value="all">全部作者</option>
+                        <!-- 作者选项将通过JavaScript动态加载 -->
+                    </select>
+                </div>
+                
+                <button class="reset-btn" id="reset-filters">重置筛选</button>
+            </div>
+            
             <div id="turtle-soup-list">
                 <!-- 海龟汤内容将通过JavaScript动态加载 -->
             </div>
@@ -779,7 +897,7 @@
     </div>
 
     <script>
-        // 海龟汤数据
+        // 海龟汤数据 - 为每个汤添加独立的密码字段
         const turtleSoups = [
             {
                 id: 1,
@@ -787,6 +905,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "medium",
+                attempts: 24,
+                password: "jiaozi2024", // 新增密码字段
                 surface: "我和婆婆相依为命，婆婆给我做我很喜欢吃的饺子，但是有一天婆婆不见了，我拿着邻居分给我的饺子，出发去寻找妹妹和婆婆。",
                 answer: "我患有智障这个病，父母抛弃我了，我和婆婆相依为命，婆婆每天都会给我做饺子，我很喜欢，但是有一天婆婆自然老死，我不知道，没有人照顾我，我只能出门，邻居们看我很饿，拿饺子诱惑我，并且强奸了我，但是智障的我以为这是游戏，生下来我的女儿，由于认知不够，我认为女儿是我的妹妹，后面邻居们看我是个傻子，没办法照顾妹妹，只能用饺子哄骗我让我出去找婆婆和妹妹。"
             },
@@ -796,6 +916,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "hard",
+                attempts: 44,
+                password: "yinzhai777", // 新增密码字段
                 surface: "阴森的殷府，失踪的希望，红红的舞台，猩红的舞枪，古怪的房间，血腥的怪物，美丽的夫人，最终的欺骗。",
                 answer: "我的女儿被人劫走，我跟着留下的信息来到了深山中的殷府，我像被人引导一般，发现了殷府中的戏台，和演出的戏台，他们全部死去了，但是三个马戏团小孩各丢失了一部分，分别是舞枪的双手，踩高跷的双脚，以及舞狮的头，通过舞枪的方向，我来到了殷府夫人的房间，通过机关，来到了暗房，看到了那怪物，以及一个五行摆的复活台，但是我吸入的迷粉，那怪物好像活过来一般，追着我跑了出去，但是他好像缺少活力，我想明白了，她想要我女儿的心脏！我来到了殷府的后方，我看到那满头白发的夫人，在割自己的心头血，旁边倒了绑架我女儿的管家和仆人，还有那个引导我的道士，他的眼神好像跟我说，让我终结一切。他们的血都被填满了血池，她发疯的问我为什么不能复活她的孩子，我最后欺骗了她，需要以你的命来换你儿子的命，她好像失了智，最后倒在了血池中，我最后一把火烧了这害人的殷府。"
             },
@@ -805,6 +927,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "medium",
+                attempts: 20,
+                password: "pengyou888", // 新增密码字段
                 surface: "我认识了新朋友，我去他家玩的时候，他的爸爸好像不欢迎我，他死了……",
                 answer: "他的父亲因为最近冒出来很多儿童变态狂，他就想要钓鱼执法，对面和他聊天的是一个真的小孩子，他也愣住了，但小孩子的父亲也在后面，父亲看到他家里没有所谓的小孩子，以为他是恋童癖，所以给他杀了。"
             },
@@ -814,6 +938,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "hard",
+                attempts: 45,
+                password: "dianhua999", // 新增密码字段
                 surface: "叮叮叮，2025…没关系的，都会好起来的。后来，什么都没有好起来。",
                 answer: "我妈妈胃癌晚期，爸爸车祸去世，我跟舅舅借钱，2025是我的学费，后来我没有遇到舅舅，但是我家的账户上多了很多钱，我打算拿去交学费和医药费的时候，有人打官司说是我父亲车祸创死了人，钱全部赔了出去，我心如死灰，我也得知了真相，原来是我的父亲因为赌博欠下高利贷，在被讨债路上，着急下撞死了人，他自知无奈，打电话给我的叔叔，我的叔叔安慰他没关系，一切都会好起来的，但是他还是自杀在了车祸现场，后来叔叔打给了妈妈，他安慰妈妈都会好起来的，但是他伪造了车祸死亡，导致保险理赔了很多钱，但是这些钱都给了父亲撞死的人，我没有了希望，我想复仇，我要把钱拿回来救妈妈，我打电话给妈妈说了最后的安慰，如果没有他们，我家里人就不会这样，后面我把他们都杀了，但是我也被警察抓了，妈妈也没有得到救治，还是死了……"
             },
@@ -823,6 +949,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "easy",
+                attempts: 30,
+                password: "fense555", // 新增密码字段
                 surface: "我有一家花店，今天来了位老爷爷，可奇怪的是他平时都会带他老伴一起来的，可今天我却没有看到，我问老爷爷'你要买朵粉色郁金香吗？'老爷爷沉默许久才开口到'买'我笑了笑，没说话，可第二天我对面的饭店老板却死了，那位老爷爷也死了。",
                 answer: "老爷爷自杀，饭店老板我杀，因为食品安全，使用了地沟油，老奶奶和老板大吵一架，争吵中，心脏病发作，老板没有打电话叫救护车，导致救护车来的很晚，在路上老奶奶心脏病发作死了，不是谁都可以让我杀人，老爷爷对我有恩，他很多年以前，收留了身为孤儿的我，我在他家度过了一年，老爷爷自杀是为了给我顶罪，我背地是一个杀手，帮人杀人挣钱，粉色郁金香是话语是永远的爱，在我这里是杀人的寓意。"
             },
@@ -832,6 +960,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "easy",
+                attempts: 20,
+                password: "kuitan666", // 新增密码字段
                 surface: "爸爸经常和我玩捉迷藏，我对爸爸说，我想要很多漂亮的石头，爸爸满足了我。最后，你还在看我吗?",
                 answer: "开头，女孩天生就有一种能力，能察觉到别人对她的目光，小时候妈妈改嫁，继父经常晚上，打开她的房间门，看她换衣服，长大后，她杀死了他的继父，并且故意引诱新的男性变态，将他们那些色情的眼睛都挖了下来，最后女孩察觉到了你，警告你不要随意窥探她的故事…"
             },
@@ -841,6 +971,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "hard",
+                attempts: 44,
+                password: "hongdeng888", // 新增密码字段
                 surface: "主子，这棋局，似平稳，黑子已陷漩涡，如若盘活，需重心将移……那就开幕吧……高家大院红红的颜色，好似办什么喜事，您瞧，我小施手段，叫那新郎官过来给您好生瞧瞧！罢了罢了，那就让他在红一些吧！当局者迷，旁观者清……",
                 answer: "太监视角，从小长相丑陋，但是他很爱女帝，他无奈只能做进宫太监，最终成为了女帝的心腹太监，太监因爱生恨，他不再是单纯的爱慕女帝，他想要的是被天下人所承认的皇后，他想要让天下人都明白，只有他才是女帝最爱的男人，只有他才是正统，但是女帝对他真的没有这方面意思，他越来越崩溃，越来越病态，只要拿到了皇后之位，那不一样也是皇帝最爱的男人吗！......公主在当公主期间，被手下门客游说，当今天下，女帝已经无力操劳各地事情，朝廷中宦官独大，那些男妃携带的背后势力已经越来越出格了，出现了很多不可控的因素，必须要掌控局势，不能在等待了，女帝驾崩太慢了，还不如想办法反叛，早日掌握皇权，公主迫于压力，于是，公主私自和皇上的当红太监谋反，许诺他，事成之后，让他成为皇后，事成后，公主伪造皇帝受病去世的假象，派遣自己的太监去建造皇陵，因为嫉妒和羡慕，太监将女帝后宫所有的男妃子都带来陪葬，红灯笼是后宫男妃做的人皮头，太监做完了这一切，在收拾遗物时，发现了女帝，给他留下的一封遗诏，里面大致意思是，女帝很爱他，本来等一切安定后想要立他为皇后，太监就非常悲痛，准备将公主也杀掉陪葬，但是还是被公主发现，他的谋反之心，只能将他杀死，在众人面前剥皮，处死！"
             },
@@ -850,6 +982,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "medium",
+                attempts: 30,
+                password: "rongyu777", // 新增密码字段
                 surface: "我考上了北京大学，但是父亲却狠狠地揍了我，我还以为是我的秘密被发现了……",
                 answer: "因为妈妈的前任以私密照威胁妈妈，导致爸爸妈妈杀死了他，远逃他乡，我考上了北京大学，免不得被发现我的信息是假的，所以他暴揍了我，我报警了，所以他们都被警察抓走了，我一直都很喜欢我的母亲，我的本意只是想要他被抓走，啊原来我只是一个野种……"
             },
@@ -859,6 +993,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "hard",
+                attempts: 45,
+                password: "jiemei999", // 新增密码字段
                 surface: "我的家庭和谐，爸爸每一天将我打扮的漂漂亮亮，蹦，怪物袭击了我的家……天差地别的环境，最熟悉的绑架，童年的幻想终于实现，新的家庭，因果的影响，永恒的爱……",
                 answer: "我和哥哥是一对亲兄弟，因为从小被人拐走，被一个男同买走，导致我和哥哥从小被人折磨变得不男不女，长大后，我和哥哥成为了他的洋娃娃，穿着女装，伺候他，但是他被警察发现，我和哥哥也被解救，最终我们俩被两个家庭领养，没有了联系，长大后，我因为好的家庭的影响，变成了很优秀的人，但是因为小时候经历，我去泰国做了手术，变成了真正的女孩子，我最后嫁给了一个门当户对的小武，哥哥因为领养他的家庭非打即骂，成为了对社会憎恨的人，我无意间被他绑架，但我认出来那是我的哥哥，我和他相认，最后却互相融合，越来越亲密，但是我的丈夫发现了我出轨了哥哥，我没办法向他坦白了一切，他却辱骂我，哥哥知道了这个事，将他大卸八块，我无奈让哥哥伪造成为他的样子，希望瞒天过海，但是哥哥越发暴躁，有一天居然怀疑我，想杀死我，我真的很爱我的哥哥，我将他做成了标本，日日夜夜陪伴着我。"
             },
@@ -868,6 +1004,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "hard",
+                attempts: 55,
+                password: "wangshi555", // 新增密码字段
                 surface: "最近朵朵回家总是板着脸，估计是病情又发作了……第二天上学时，她又过来和我炫耀新的文具，真是糟糕的一天！！！第三天晚上，哥哥偷偷进来我的房间，他！！第四天，老师跟我说，她想了解我最近遇到的事情。第五天，原来没有哥哥，一直都是我自己……",
                 answer: "1990年前，作为老师的朵朵在她上小学的时候被她的老师性骚扰，这也导致了她在以后成为老师的时候，留下一定的心理阴影，结果导致了身为老师的朵朵，以同样的方式在2000年的第四天，在老师的班班里面性骚扰了这个时候的哥哥，(这个时候的哥哥也是小学生)，使得这个时候的哥哥啊，就对此留下了心理阴影。但并不是说哥哥就成为了这样的人，他只是很恨这样的人，但是哥哥忍耐了下来，就当是过去了噩梦……在第二天上学的时候，已经长大成人的哥哥给自己的妹妹送了一个很好看很贵的文具，妹妹去到学校后，将这个玩具炫耀给她的同桌看，也就是这个时期的第二个朵朵，名字叫朵朵的小学生，这个时候，哎，所以朵朵回家他就板着脸也不说话，朵朵家里面条件没这么好，她希望她也有这么一位哥哥给她送这么一个文具。同时妹妹回家跟哥哥说了今天去上学，跟同桌说了这么一个事儿。哎，哥哥就随口问了问班里的情况，你和这个同桌关系怎么样？班里老师是谁呀？问到后面，哥哥突然发现妹妹说到自己的老师是多年前骚扰过哥哥的老师的时候，哥哥就很害怕妹妹被性骚扰，所以就准备去检验。嫉妒的后果，朵朵将老师认作了自己的哥哥，老师也很开心的成为了朵朵的哥哥，邀请朵朵来到老师家过夜，所以老师盯上了这个小学生朵朵……所以第三天晚上，哥哥就去到了妹妹的房间。他想查看妹妹身上有没有被骚扰的痕迹，他不想妹妹经历和自己一样的痛苦。同时在这天晚上，老师以一个文具作为代价诱惑这个小学生的朵朵，在她家过夜。同时，老师进入了朵朵的房间，对她进行了一系列的性骚扰。由于朵朵受到了妹妹的文具的诱惑，他幻想自己也有这么一个哥哥。也正是因为朵朵的自身条件并不是特别好啊，她想要这么一个文具，所以答应了所谓哥哥的请求。第四天，这个时候。老师将朵朵祸害完之后，又将新的目光盯上了这个哥哥的妹妹，他也对哥哥的妹妹进行这一系列的性骚扰。在当四天晚上，妹妹身上被老师骚扰的痕迹被哥哥发现了，就导致了在第5天的时候，哥哥忍耐不住想办法杀死了身为朵朵的这个老师。由于老师的死亡。学校也查明了事情发生的全部真相，这也使得，身为被害者的小学生朵朵认清了一个现实，原来没有所谓的她的哥哥，都只是坏人，这一切只有她自己。"
             },
@@ -877,6 +1015,8 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "hard",
+                attempts: 44,
+                password: "fuzi888", // 新增密码字段
                 surface: "前因，听说，华嫂为了寻夫，拿着两张船票，离开了镇子。开端，'都说了，当归和附子不要拿反了！'小孚一股劲地点头。傍晚，王三悻悻而归。老张头低头写着'支出：十五个大洋， 三个大洋 收入：十二个大洋，四个大洋（预）'中序，王母看着桌子的桂花糕，沉思许久，'希望明年的桂花糕别那么甜了'。深夜，老张头将'富贵药'调配好，风吹散了顾虑。末端，镇上流传华嫂客死他乡的消息，衙门查封了药铺，王母悔恨不已，怀恨而去。王三也不知去向。听闻富贵药在另外一个镇开卖了……",
                 answer: "故事开端，1858 年，王母和华嫂结为老同，她两的情谊是非常非常高的，长大后，她们各自嫁出去，1869 年，由于商人看中了华嫂的容貌，于是华嫂嫁给了他，这也导致了华嫂过了一段时间的华丽生活，她的生活已经得到质的改变，她好像已经迷恋上这种生活了，1875 年王母嫁给了当时刚刚失去主母的王家，（类似于娶小），而 1871 年，商人由于做生意，远去西边，没有回信，华嫂无奈只能通过肉体交易来换金钱支撑自己活下去，这个时期她找到王三，王三由于是个富少，出手阔绰，于是包了华嫂一年，这两年华嫂就靠自己的包养钱活了很滋润，但是王少很快便玩腻了这种生活，1872 年，他们便结束了这种关系，1873 年，华嫂便察觉到自己有了小孚，于是，她便想留下小孚，作为以后报复王三的筹码。但是她的经济收入不支持她赡养孩子，于是便找到了药铺的老张头，和他进行了一系列的交易，但是好久不长，她的身体已经不支持在接客了，于是她只能靠着王母的救助，生下来小孚，这年是 1874 年。1875 年，王府丧主母，为了保持'主妇在位'王母便借此嫁入了王府，但是她毕竟刚刚嫁入此处，各个方面都欠佳考虑，她想要控制王家，便和药铺老张头商量了富贵药的计划，（富贵药就是说，把一个人的小病治好后，然后将这个小病，变为长久的慢性毒药病，以此谋益）使得王三的病，由于小病变为慢性疾病，让男人变成病秧子，并且让他对其上瘾，每日浑浑噩噩，将男人的统治地位拉下来，让王三成为'傀儡皇帝'让王母彻底控制对王府的统治，这也使得她对事情的掌控慢慢变大。时间随之而过，小孚也慢慢长大，母亲无聊时间，教她识字，但是母亲文化水平有限，她也只能教到一部分，小孚只能识字，并不会写很多字。1882 年，王母已经基本完成了王府的巩固地位，但是由于王母和华嫂的女书被小孚无意间看到，于是王母便想要将小孚毒哑，不想要让小孚成为未知的变量。她也答应华嫂，等事情结束后，华嫂搞来船票，她会和她远走高飞。（由于华嫂的能力根本很少时间能挣来船票，由此看出王母想要拖延时间，她根本不想和华嫂远去，只是为了哄着她的老同罢了，希望她给她足够的精神支柱）（女书中的内容大概就是说王母对未来的一些打算，以及想和华嫂私奔的打算，倘若这丫头说出去不就破坏了自己的计划了吗）于是发生了开头的一幕，华嫂找到老张头，透露出自己要离开此处，这小孚是他的女儿，她需要十五大洋，即刻出发，老张头以为真是他的女儿，于是便付钱带走了小孚，老来得子的喜悦使得他忘记三思。一开始他还是认认真真的教导小孚，希望他死后，小孚也能依靠富贵药，或者正常靠药铺维持生计也没关系。他为她想好了后路，但是傍晚王三从华嫂那里回来之后，王三来开药时，老头便发现小孚和王三有几分相像之处，便回去思考打算依靠测试骨龄，来查明小孚是不是自己的女儿。果然她不是他的女儿。于是后来他便对小孚态度冷眼相向，轻则辱骂，重则殴打，小孚不能理解为什么这个人对我变化这么大，她听从母亲的教导，勾引男人，但是老张头看到她这样更是气不打一处来，原来她和她的母亲一样都是如此的恶心，让人作呕，他便将她赶出药铺。深夜，风吹散了小孚的顾虑，既然如此，那就一不做二不休，第二天，小孚博取老张头的同情，再次进入了药铺，她更换了老张头的养身中药，将附子和当归调换，于是药量过大，所以老张头就死于了药铺之中。可能他也没想到他会死在他细心教导的附子和当归之间。在此之前张老头便想将小孚卖到王府，换取钱财，毕竟这不是自己的女儿，开头的细心教导中也可以看出来小孚，分辨不清他的富贵药的秘方，卖出去自然是最大的收益，于是他便联系了王母，说到了小孚的婚事，王母一听这好呀，这女的便是自己那女同的女儿，如果要是嫁过来了，自己弄死他不是分分钟吗，这也会使得自己的秘密完全隐藏了，再也不会出现纰漏，两人便一拍而合。然后由于了老张头的死亡，药铺的一些药的来源进价各个方面便出现了纰漏，小孚有心撒谎，也没办法掩饰，这个药铺运转不下去，她的文化水平实在有限，各个药方看病能力确实是不行，她不能暴露自己杀人的事实，只能铤而走险，如若王母那边出事，暴露了王母和老张头的事情，那大家不就认为老张头畏罪潜逃，这一切不就天衣无缝了吗。（小孚处理尸体的过程大概就是说等到王母那边出事，她在将尸体弄出来，伪造成老头畏罪潜逃无果自杀了）于是小孚便将桂花糕的成分加大，（此处便对应小孚加大附子的用量，就是用当归和附子对换）而王母天性喜欢吃当归这种加甜的放入桂花糕中，往年桂花糕都是经过药铺秘加工才送到王府，这一年经过小孚更换了两个中药，使得补药变成了毒药，于是王母在末端之后，怀恨的是当初为什么没有直接杀死小孚，让此人留存这么久，又悔恨要是当初跟她的老同离去，是不是就不会有今天这一幕。王三的视角，他这些年玩弄了很多人的感情，对这些女人都没什么感觉了，后来从王母口中得知华嫂有个女儿，正准备离开小镇，他算算日子，好像这个女儿是他的，（但是此处，他不知道小孚是他的女儿）于是那天他便急匆匆的去找华嫂，想要找到自己的女儿，但是为时已晚，华嫂想要报复他，便只是说了卖给了他人，华嫂便被王三辱骂了一顿，王三悻悻而归这就是。王三悻悻而归后，回到王府无意间发现了华嫂的踪迹，这也使得王三和王母产生争端，原来华嫂当初没有坐船离开，反而被王母带回来王府作为精神支柱活着，过一阵子之后，王母便放出华嫂已死亡的消息，借此来保护华嫂的名声，但是这居然被王三发现了，王三便和王母发起了争端，为什么这个女人会在这里？使得王三大吵一架离开了王府，也没有吃掉桂花糕，这也让他逃过一劫，王母买来的特质的桂花糕，只死了她自己和府上的一些其他贵人。由于王母的死亡，导致王三的药中断，王三没有了慢性药的摧残，身心倒是慢慢恢复正常，但是对此的依赖性使得他的身体极度虚弱，他后知后觉的发现这个镇子上的人都不正常，他只想逃离这里，加上王母的死亡，整个王府上下本来被打点的井井有条的就各种纰漏出现，已经没有主事人了，王母这些年揽权太过大了，整个王府便无奈走上衰败，王三便拿着分下的财产离开了此处，他想找到华嫂，问清楚自己的亲生骨肉到底去哪里了，于此同时消失的还有小孚，她已经离开了这个镇子，去往其他的镇子，去卖其他镇子的富贵药了。事后小孚通过整理府上的女书得知了华嫂的藏身之所，于是便有了下面的情节。在小孚离开小镇之前，她看着自己的生母华嫂，笑着看着她，用笔写在女书上给她看'看样子你的老同没有救下你呀，这些谣言就想骗过我吗？不知道的普通人还以为你真的死了呢'随后华嫂便一辈子闭上了嘴，在小孚的陪伴下成为了她的'附子'。（此处华嫂并没有死亡，只是在小孚的作用下，也变成了哑巴）一些带汤人提示：你从王三的视角里面可以看出来，传统这些男人的世界里面，香火的延续往往是很重要的，这些年他就一个女儿，真不知道是老天的报应吗，于是他便想找到自己的亲生孩子，哪怕是个女的，以后让她找个入赘的女婿不就好了。但是小孚杀害老张头本来也只是为了自保，想安静过几日安分日子，只能说'附子'跟对好的人便发挥好的作用，跟坏的人便就是坏作用，附子本身有毒不假，但是搭配的好确实是救命的良药。如若老张头待她如初，可能他的店铺和自己的后半生也可以获得好的下场。小孚的杀害老头动机：她对待自己被反复抛弃的行为感到恶心，她不想再把命运交给别人，她想要自己掌控命运，她还想对自己的母亲复仇，她得活着一定要活的比谁都好！而小孚杀害王母的动机：就是她需要王母的死亡来脱身，她不想自己在牢狱里面待一辈子，详情看上面，并且她大概也能当初王母和华嫂对她做的一切，她需要复仇。"
             },
@@ -886,22 +1026,47 @@
                 author: "林一",
                 type: "本格",
                 difficulty: "hard",
+                attempts: 40,
+                password: "wuming666", // 新增密码字段
                 surface: "明日，便熬出头了，希望今夜一切无事吧……次日，县太爷吊死在城门前，新的县太爷下令彻查此案……娃儿，醒了？老奶奶从很多封信中拿出一封，'帮我读一下这封我儿子寄回来的信，我不认字'（字体青衫飘飘，矫若游龙）信中内容大概是写，边关一切安好，等他升到大官就可以回家了，就是伙食不太好，希望母亲寄些钱财……多日后，县太爷的妻儿在野外被发现，尸骨无存……",
                 answer: "做官的中庸之道，你虽然有一些贪欲，但你可以将这个地方的收益达到最大化。但是后面的势力不能一直放任你成长，需要新的地方、新的人，新的势力来维持这个现状，达到性价比最高，以至于钱财到手最好。昨日，你答应和县令的交换条件，你答应帮助他掩护他的妻儿出城，事后回来，他会将你想知道的一切告诉于你。但是你没有发现，在出城的路上，外面掩藏了太多杀手，你在激烈打斗过程中只能逃走，在大雪纷飞之下，被老人家捡回来一条命。你的家庭死于一切的开端，当时国家面临战事飞起，你的父母是皇室的儿子，是第二个儿子，但是由于才能兼备，你的父亲受命来到这里查清楚军队抚恤金被冒领这一事，这使得当时的县太爷禀报上去，背后的势力，太子爷哪里就是靠此敛财，他们在月黑风高夜一把火烧了你的家，家人全部死亡，但是侥幸你活了下来，事后，你更名换性，加入（无名）这个机构，这个机构只为百姓，不为皇家服务，当这个国家不在为百姓着想，民不聊生，他们就会站出来，推动统治，暗中帮助真正的明君站位，这途中会死很多人，但是他们觉得是值得的，人要是没有了理想和禽兽没什么区别，这是他们的信条，借着组织给的任务，你来到家乡，你在这里出生，但是那场大火没烧死你，你回来调查当年的真相，和抚恤金的事情……老县太爷看到你的到来，他也明白无名这个组织的到来，和你询问当年的事情，就知道当年的谋反留下来祸患，这些年他为背后的组织做牛做马，虽然小贪一点，但是他们还是想做掉自己，在故事的前面，新的县太爷就已经来到了这里，并且给你一个毒药丹顶红，让你自行了断，你实在是不服，你想好了法子，你要伪装成，你想要保全自己的孩子妻子，虽然你知道这时候放她们出去肯定九死无生，但是要是真的出去了，算他们的命好，没出去，你们一家子的仇，就要让无意来挖掘秘密的时候，借无意的刀和背后的组织杀掉这些人，让他们明白，你不是这么好拿捏的，在临走前，你安排无意护送妻子儿子出去，并且将丹顶红给了无意，引导他明白这一切没这么简单，想要真相那就追查下去，第二天你就吊死在了城门外，想要打消那些人的怀疑，想要无意的行动多些成功率。老人家通过你身上携带的玉佩，判断出你身份不凡，就寻思让你帮她读一下儿子寄回来的信（玉佩是你父母贴身给你的保佑，一直不曾离身，也是你身份的象征）你原名叫李意，后来改命为无意。新的县太爷安排的杀手，将三辆马车全部拦截，但是好像老县太爷的妻儿一概不知，逼问多日之后，她们被杀死丢到了野外，后面被野兽吃光，尸骨无存，新的县太爷察觉到没这么简单，这些抚恤金和抚恤金的名单，都丢失了，他搜遍了一切地方都没搜到，还有，他给老县太爷的药也不在了，到底是怎么回事，他只能彻底搜索，不能出现一点纰漏。"
+            },
+            {
+                id: 13,
+                name: "政策",
+                author: "林一",
+                type: "本格",
+                difficulty: "medium",
+                attempts: 20,
+                password: "zhengce777", // 新增密码字段
+                surface: "新闻上放出的新政策，让我获得了新工作，也出现了一些噪音，让我的睡眠不稳…后来，我辞去了工作，沉沉睡去。",
+                answer: "6626"
+            },
+            {
+                id: 14,
+                name: "七只灰雀",
+                author: "雪王",
+                type: "本格",
+                difficulty: "hard",
+                attempts: 50,
+                password: "huique999", // 新增密码字段
+                surface: "第一只灰雀栖于画架 衔走两粒晨星的核 它的羽毛沾了丹青 镜中人变身无声的展品 第二只灰雀停在高椅 吞下第十滴金色光 它的啼声凝固喉间 指节蜷缩成镀金的蜕鳞 第三只灰雀眠于绒床 塑成一把心形剪刀 它的羽衣绣满奇文 银盘畔一朵花逐渐枯萎 第四只灰雀绕桌轻跳 尝过第一枚美梦籽 它的渴念永悬空际 月光自残羽裂隙间漏泻 第五只灰雀持着木槌 哽咽第一苞夹竹桃 它的歌声卡在半空 断裂的真言碎散于纸面 第六只灰雀醉卧横台 落下四片鲜艳羽毛 它的羽毛翻向月光 心弦震颤奏着未终乐章 第七只灰雀凝望镜中 结下第十根无名线",
+                answer: "序章 我，一个旅者/探险家 ，这个地方的还是总是喜欢哼唱七只灰雀这首童谣 我发现了一个荒废的庄园，我进去后发现有七个房间，每个房间里都陈列着一个死者的尸体。 每个死者的死亡方式都极其残忍，仿佛是对他们生前罪行的惩罚。 一只灰雀栖于画架 衔走两粒晨星的核 它的羽毛沾了彩虹水 镜中影子变成无声的展品 傲慢的艺术家 死法 他被发现时，身体固定在一座画架上。四肢和躯干被凿子与锤子刺穿，鲜血顺着工具滴落地 面，形成一滩猩红。他的皮肤被剥下，涂上鲜艳的颜料，制成一幅扭曲的'人体画布'。双眼被 挖出，血淋淋的眼球被放置在颜料盘中，象征他只看得见自己的'伟大'。尸体周围摆放着七面 镜子，每面镜子反射出他痛苦扭曲的面容，仿佛在嘲笑他的傲慢。 傲慢的艺术家自视甚高，曾恶意毁坏一位粉丝，年轻艺术家的作品，声称对方的创作是对艺术 的亵渎。他的攻击导致那位年轻艺术家因羞辱和绝望而自杀。他还将受害者的失败当作自己的 '灵感'，在画架上创作出一幅自鸣得意的作品。 两只灰雀停在高椅 吞下第十滴金色光 它们的啼声凝固喉间 指节蜷缩成镀金的蜕鳞 贪婪的金融家 死法 他被发现时，身体被自己的贪欲象征物残忍地固定在一张奢华的办公椅上。双手被钉穿，十指 戴满抢来的戒指，血从指缝渗出。口中被灌入熔化的黄金，喉咙和食道被高温烫得焦黑，鲜血 混着金液滴落地面，凝成一摊诡异的金红混合物。他被泡在滚烫的金水里，铸造成了'财富雕 像'。 这位贪婪的金融家/操盘手曾金融诈骗，骗取了无数投资者的毕生积蓄，导致许多家庭破产。 他甚至雇佣杀手，杀害了试图揭露他罪行的知情者，从尸体上抢下是10枚戒指作为战利品。他 坐在奢华的办公椅上，得意地数着染血的金币。 三只灰雀眠于绒床 塑成一座心形剪刀 它的羽衣绣满奇妙文 银盘旁边七朵花枯萎 色欲的连环杀手 —男 死法 他被发现时，身体被自己的猎艳工具残忍地固定在一张红色天鹅绒床上。胸膛被手术刀剖开， 内脏被取出摆成心形，人被从中间，劈开成剪刀形。他的皮肤被刻满扭曲的污言秽语，制成一 幅淫靡的'欲望画卷'。生殖器被割下，血淋淋地置于银盘中。 这位色欲的连环杀手以诱骗年轻女性为乐。他曾在自己的红色天鹅绒床上，残忍杀害多名受害 者，取走他们身体的一部分作为'纪念'。 四只灰雀绕桌轻跳 尝过第一枚美梦籽 它们的歌声卡在半空 月光从破羽间漏下 暴食的总裁 死法 他被发现时，身体被自己的餐具残忍地固定在一张宴会长桌上。周围摆放七盘只咬了一口的珍 馐，胃部被水撑爆。喉咙被切开灌入甘水，内脏混着未消化的食物溢出，顺着桌边滴落地面。 这位暴食的总裁经营着一家婴儿食品公司，为了追求利润，他不惜在产品中使用有害物质，导 致多名儿童因食用这些食品而患病。他却对此毫不在意，继续在奢华的宴会上大肆挥霍，桌上 摆满珍馐。他习惯只咬一口便丢弃食物，浪费无度，无视底层人民的饥荒。 五只灰雀持着木槌 喉中第一颗夹竹桃 它们的歌声卡在半空 断裂的真言散落纸上 愤怒的法官 死法 他被发现时，身体被自己的法槌残忍地固定在一张审判席上。喉咙被塞满氰化物，舌头被切 下，血肉模糊地落在判决书上 这位愤怒的法官以暴躁著称，贪污，经常在法庭上用自己的法槌殴打桌子，甚至辱骂和威胁被 告却因背景，未被革职。他曾因个人情绪，冤判一名无辜者入狱，导致对方在狱中被虐待致 死。 六只灰雀醉卧横台 落下四片鲜艳羽芒 它的羽毛翻向月光 心弦颤奏未完的乐章 懒惰的医生 死法 他被固定在手术台上，他的四肢被锋利的手术锯逐一锯下，切口参差不齐，鲜血如雨点般滴落 地面，形成一滩猩红的血泊。四肢被整齐摆放在他周围，像遗落的羽毛，皮肤向外翻起，露出 仍在微弱跳动的心脏。 医生李明工作敷衍了事，他负责手术，却从不认真查房和记录。导致手术失败。一天，病人小 张因病情恶化急需调整治疗方案。却因他记录的医疗状况有误，导致病情加重死亡。 最后一只灰雀凝望镜中 结下第十根无名线 它的泪滴落进针林 心事被迫绽放成花 嫉妒的评论家 死法 她的双手被残忍地钉在镜子前，十根手指被一根根砍掉。她的眼睛被强行撑开，眼球上插满了 细小的针刺，她的心脏被强行扯出，塞进了她张开的嘴里。 她曾因嫉妒一位年轻艺术家的才华与成功，撰写了一系列恶毒的评论，恶意诋毁艺术家的作 品。年轻艺术家因声誉受损、精神崩溃，走上了自杀的不归路。 一个疲惫的心理医生完成了对旅者的催眠治疗，自信地'杀死'了旅者体内的七个邪恶人 格——傲慢、贪婪、色欲、暴食、愤怒、懒惰、嫉妒，只留下他认为纯净的旅者人格。 然而，旅者睁开眼，嘴角露出一丝冷笑，喝了一口水 （伏笔！！必须盘） 优雅起身，低语：'谢谢你，医生，你帮我清除了那些没用的傀儡。' 医生以为是自己的治疗杀死了7个人格，结果只是给旅者提供了一个清除其他人格的方式。 彩蛋 然而医生邪魅一笑：'七只麻雀，从来没人敢唱完' 第八只灰雀立于白塔 携来最后一剂药方 它的羽底藏着七影 笔尖下众灵魂成为乐章 '医生轻声笑道，'每一位来到我这里的'病人'，都唱着同样的童谣。而我，每次都能帮他 们'清除'那些软弱的人格。' 医生翻开笔记本，里面整齐地排列着数七个名字和日期，'你知道有什么比治愈一个多重人格 患者更有成就感的事吗？那就是留下最凶残的那一个，再诱导他们杀人，然后记录下每一个细 节。' 旅者惊恐地发现墙上的七幅肖像画中，每一幅都是一位前患者——他们在医生的'治疗'下，真 的去实施了那些谋杀，模仿自己想象中的'七宗罪'。旅客因为水里的迷药，逐渐头晕。 而你，是那帮患者中之中，最最凶残的那个 而医生准备让第八个'旅者'也踏上同样的不归路。笔记本最后一页上，已经写上旅者的信息 原来医生才是真正的，无差别变态杀人狂。旅客眼神空洞地瘫在地上。 医生轻唱'第八只灰雀立于白塔 携来最后一剂药方 它的羽底藏着七影 笔尖下众灵魂成为乐章"
             }
         ];
 
         // 玩家数据
         const players = [
             { rank: 1, name: "大鹅", points: 1000, type: "本格", solved: "饺子" },
-            { rank: 2, name: "小王", points: 100, type: "本格", solved: "饺子" },
-            { rank: 3, name: "大五", points: 200, type: "变格", solved: "饺子" },
+            { rank: 2, name: "白开水", points: 1000, type: "本格", solved: "饺子" },
+            { rank: 3, name: "晴", points: 0, type: "本格", solved: "0" },
             { rank: 4, name: "大四", points: 300, type: "变格", solved: "饺子" }
         ];
 
         // 作者数据
         const authors = [
             { name: "林一", points: 10000, type: "本格", written: "饺子,殷宅,朋友,电话,粉色郁金香,窥探,红灯笼,荣誉,姐妹,往事,附子,无名" },
+            { name: "雪王", points: 1500, type: "本格", written: "七只灰雀" },
             { name: "狗汤王", points: 2000, type: "本格", written: "所有狗汤" },
             { name: "待议1", points: 0, type: "本格", written: "" },
             { name: "待议2", points: 0, type: "本格", written: "" },
@@ -972,11 +1137,15 @@
         const bountySoups = [
             { name: "红灯笼", reward: 1000, type: "本格", difficulty: "困难", author: "林一" },
             { name: "电话", reward: 1000, type: "本格", difficulty: "困难", author: "林一" },
+            { name: "政策", reward: 400, type: "本格", difficulty: "中等", author: "林一" },
             { name: "饺子", reward: 400, type: "本格", difficulty: "中等", author: "林一" }
         ];
 
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
+            // 渲染作者筛选选项
+            renderAuthorFilter();
+            
             // 渲染海龟汤列表
             renderTurtleSoups();
             
@@ -1005,14 +1174,60 @@
                     document.getElementById(moduleId).classList.add('active');
                 });
             });
+            
+            // 添加筛选器事件
+            document.getElementById('difficulty-filter').addEventListener('change', renderTurtleSoups);
+            document.getElementById('author-filter').addEventListener('change', renderTurtleSoups);
+            document.getElementById('reset-filters').addEventListener('click', resetFilters);
         });
+
+        // 渲染作者筛选选项
+        function renderAuthorFilter() {
+            const authorFilter = document.getElementById('author-filter');
+            
+            // 获取所有不重复的作者
+            const authors = [...new Set(turtleSoups.map(soup => soup.author))];
+            
+            // 添加作者选项
+            authors.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author;
+                option.textContent = author;
+                authorFilter.appendChild(option);
+            });
+        }
+
+        // 重置筛选器
+        function resetFilters() {
+            document.getElementById('difficulty-filter').value = 'all';
+            document.getElementById('author-filter').value = 'all';
+            renderTurtleSoups();
+        }
 
         // 渲染海龟汤列表
         function renderTurtleSoups() {
             const container = document.getElementById('turtle-soup-list');
             container.innerHTML = '';
             
-            turtleSoups.forEach(soup => {
+            // 获取筛选条件
+            const difficultyFilter = document.getElementById('difficulty-filter').value;
+            const authorFilter = document.getElementById('author-filter').value;
+            
+            // 筛选海龟汤
+            const filteredSoups = turtleSoups.filter(soup => {
+                if (difficultyFilter !== 'all' && soup.difficulty !== difficultyFilter) return false;
+                if (authorFilter !== 'all' && soup.author !== authorFilter) return false;
+                return true;
+            });
+            
+            // 如果没有找到匹配的海龟汤
+            if (filteredSoups.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 40px;">没有找到匹配的海龟汤</p>';
+                return;
+            }
+            
+            // 渲染筛选后的海龟汤
+            filteredSoups.forEach(soup => {
                 const difficultyText = {
                     'easy': '简单',
                     'medium': '中等',
@@ -1022,45 +1237,53 @@
                 const soupCard = document.createElement('div');
                 soupCard.className = 'turtle-soup-card';
                 soupCard.innerHTML = `
-                    <div class="soup-title">
-                        <span>${soup.id}. ${soup.name} 
-                            <span class="type-tag">${soup.type}</span>
-                            <span class="difficulty-tag difficulty-${soup.difficulty}">${difficultyText[soup.difficulty]}</span>
-                        </span>
-                        <span class="soup-author">作者：${soup.author}</span>
+                    <div class="limit-counter">
+                        <div class="limit-number">${soup.attempts}</div>
+                        <div class="limit-label">剩余次数</div>
                     </div>
-                    <div class="soup-content">${soup.surface}</div>
-                    <button class="btn start-strategy" data-id="${soup.id}"><i class="fas fa-play"></i> 开始攻略</button>
-                    <div class="notes-section" id="notes-${soup.id}">
-                        <div class="notes-header">
-                            <h3>${soup.name} - 攻略笔记 
+                    <div class="soup-content-wrapper">
+                        <div class="soup-title">
+                            <span>${soup.id}. ${soup.name} 
                                 <span class="type-tag">${soup.type}</span>
                                 <span class="difficulty-tag difficulty-${soup.difficulty}">${difficultyText[soup.difficulty]}</span>
-                            </h3>
+                            </span>
+                            <span class="soup-author">作者：${soup.author}</span>
                         </div>
-                        <div>
-                            <strong>汤面:</strong>
-                            <p>${soup.surface}</p>
-                        </div>
-                        <div class="password-section">
-                            <strong>查看汤底:</strong>
-                            <div class="password-input">
-                                <input type="password" id="password-${soup.id}" placeholder="输入密码查看汤底">
-                                <button class="btn view-answer" data-id="${soup.id}"><i class="fas fa-eye"></i> 查看</button>
+                        <div class="soup-content">${soup.surface}</div>
+                        <button class="btn start-strategy" data-id="${soup.id}">
+                            <i class="fas fa-play"></i> 开始攻略
+                        </button>
+                        <div class="notes-section" id="notes-${soup.id}">
+                            <div class="notes-header">
+                                <h3>${soup.name} - 攻略笔记 
+                                    <span class="type-tag">${soup.type}</span>
+                                    <span class="difficulty-tag difficulty-${soup.difficulty}">${difficultyText[soup.difficulty]}</span>
+                                </h3>
                             </div>
-                            <div id="answer-${soup.id}" style="display: none; margin-top: 15px;">
-                                <strong>汤底:</strong>
-                                <p>${soup.answer}</p>
+                            <div>
+                                <strong>汤面:</strong>
+                                <p>${soup.surface}</p>
                             </div>
-                        </div>
-                        <div>
-                            <strong>笔记区:</strong>
-                            <textarea class="notes-area" id="notes-area-${soup.id}" placeholder="在这里记录您的攻略笔记..."></textarea>
-                        </div>
-                        <div class="notes-actions">
-                            <button class="btn save-notes" data-id="${soup.id}"><i class="fas fa-save"></i> 保存笔记</button>
-                            <button class="btn delete-notes" data-id="${soup.id}"><i class="fas fa-trash"></i> 删除笔记</button>
-                            <button class="btn close-notes" data-id="${soup.id}"><i class="fas fa-times"></i> 关闭</button>
+                            <div class="password-section">
+                                <strong>查看汤底:</strong>
+                                <div class="password-input">
+                                    <input type="password" id="password-${soup.id}" placeholder="输入密码查看汤底">
+                                    <button class="btn view-answer" data-id="${soup.id}"><i class="fas fa-eye"></i> 查看</button>
+                                </div>
+                                <div id="answer-${soup.id}" style="display: none; margin-top: 15px;">
+                                    <strong>汤底:</strong>
+                                    <p>${soup.answer}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <strong>笔记区:</strong>
+                                <textarea class="notes-area" id="notes-area-${soup.id}" placeholder="在这里记录您的攻略笔记..."></textarea>
+                            </div>
+                            <div class="notes-actions">
+                                <button class="btn save-notes" data-id="${soup.id}"><i class="fas fa-save"></i> 保存笔记</button>
+                                <button class="btn delete-notes" data-id="${soup.id}"><i class="fas fa-trash"></i> 删除笔记</button>
+                                <button class="btn close-notes" data-id="${soup.id}"><i class="fas fa-times"></i> 关闭</button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1088,7 +1311,11 @@
                     const passwordInput = document.getElementById(`password-${soupId}`);
                     const answerSection = document.getElementById(`answer-${soupId}`);
                     
-                    if (passwordInput.value === '666') {
+                    // 查找对应的海龟汤数据
+                    const soup = turtleSoups.find( => .id == soupId);
+                    
+                    // 使用该汤的特定密码进行验证
+                    if (passwordInput.value === soup.password) {
                         answerSection.style.display = 'block';
                     } else {
                         alert('密码错误！');
@@ -1222,6 +1449,7 @@
                     const passwordInput = document.getElementById(`password-dog-${soupId}`);
                     const answerSection = document.getElementById(`dog-answer-${soupId}`);
                     
+                    // 狗汤保持使用原密码"666"
                     if (passwordInput.value === '666') {
                         answerSection.style.display = 'block';
                     } else {
